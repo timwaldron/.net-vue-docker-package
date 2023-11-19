@@ -1,0 +1,28 @@
+version: '3.4'
+
+services:
+  api:
+    container_name: api
+    expose:
+      - 80
+    build:
+      context: .
+      dockerfile: ./Web.Api/Dockerfile
+    restart: always
+    environment: 
+      - TZ=Australia/Melbourne
+
+  spa:
+    container_name: spa
+    ports:
+      - "8080:80"
+    build:
+      context: .
+      dockerfile: ./Web.Spa/Dockerfile
+
+  mongo:
+    container_name: mongodb
+    image: mongo:4.4.7
+    # command: [--auth]
+    ports:
+      - "27017:27017"
