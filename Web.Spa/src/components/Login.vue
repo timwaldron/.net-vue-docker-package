@@ -2,7 +2,7 @@
     <div class="flex justify-content-center flex-wrap align-items-center h-100">
         <Card style="width: 25em">
             <template #title>Login</template>
-            <template #subtitle>Don't have an account? <a href="#">Create one now!</a></template>
+            <template #subtitle>Don't have an account? <router-link to="/create-account">Create one now!</router-link></template>
 
             <template #content>
                 <span class="p-float-label mb-5 mt-2">
@@ -11,7 +11,7 @@
                 </span>
                 
                 <span class="p-float-label">
-                    <Password id="password" toggleMask v-model="password" />
+                    <Password id="password" toggleMask v-model="password" :feedback="false" />
                     <label for="password">Password</label>
                 </span>
             </template>
@@ -30,9 +30,9 @@
 import axios from 'axios';
 
 import Button from 'primevue/button';
-import Card from 'primevue/Card';
-import InputText from 'primevue/InputText';
-import Password from 'primevue/Password';
+import Card from 'primevue/card';
+import InputText from 'primevue/inputtext';
+import Password from 'primevue/password';
 
 import { defineComponent } from 'vue';
 
@@ -52,7 +52,8 @@ export default defineComponent({
     },
     methods: {
         async login(): Promise<void> {
-            const response = (await axios.post<string>('/api/v1/users/login', { email: this.email, password: this.password })).data;
+            // const response = (await axios.post<string>('/api/v1/dev', { email: this.email, password: this.password })).data;
+            const response = (await axios.get<unknown>('/api/v1/dev')).data;
 
             console.log('The response: ', response);
         }
