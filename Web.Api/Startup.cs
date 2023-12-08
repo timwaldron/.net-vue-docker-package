@@ -12,6 +12,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Web.Api.Config;
+using Web.Api.Middleware;
+using Web.Api.Repositories;
+using Web.Api.Services;
 
 namespace Web.Api
 {
@@ -31,6 +34,13 @@ namespace Web.Api
             services.Configure<AppSettings>(Configuration.GetSection(nameof(AppSettings)));
             services.AddSingleton<IAppSettings>(sp => sp.GetRequiredService<IOptions<AppSettings>>().Value);
 
+            // Services
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IDevService, DevService>();
+
+            // Repositories
+            services.AddScoped<IAccountRepository, AccountRepository>();
 
             services.AddControllers();
         }
@@ -48,7 +58,7 @@ namespace Web.Api
             app.UseRouting();
             app.UseAuthorization();
 
-            //app.UseMiddleware<JwtMiddleware>();
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

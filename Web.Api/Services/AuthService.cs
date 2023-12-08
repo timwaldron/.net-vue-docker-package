@@ -31,7 +31,7 @@ namespace Web.Api.Services
             // TODO: Add property sanitization (lowercase?) check MongoDB query
             var filter = Builders<Account>.Filter.Eq(field => field.Email, payload.Email);
 
-            AccountDto account = (await _repository.FindByQuery(filter))?.FirstOrDefault(); // Email address is unique
+            AccountDto account = await _repository.GetByEmail(payload.Email); // Email address is unique
             if (account == null) // Email Address doesn't exist
             {
                 return null;
@@ -56,7 +56,11 @@ namespace Web.Api.Services
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()), new Claim("role", user.Role.ToString("d")) }),
+                Subject = new ClaimsIdentity(new[] {
+                    new Claim("id", user.Id.ToString()),
+                    new Claim("role", user.Role.ToString("d")),
+                    new Claim("email", user.Email),
+                }),
                 Expires = DateTime.UtcNow.AddMinutes(120),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };

@@ -12,14 +12,15 @@ namespace Web.Api.Repositories
 {
     public class RepositoryBase<T> where T : class
     {
-        private readonly IMongoCollection<T> _items;
+        private readonly IMongoCollection<T> _collection;
         public virtual string CollectionName { get; set; }
 
         public RepositoryBase(IAppSettings settings)
         {
             var clientSettings = new MongoClientSettings
             {
-                Credential = MongoCredential.CreateCredential(settings.Database.AdminDb, settings.Database.AdminUser, settings.Database.AdminPass),
+                // TODO: Design a way to easily configure the MongoDB container to set an admin password
+                //Credential = MongoCredential.CreateCredential(settings.Database.AdminDb, settings.Database.AdminUser, settings.Database.AdminPass),
                 Server = new MongoServerAddress(settings.Database.ConnectionUrl, settings.Database.Port),
             };
 
@@ -29,26 +30,26 @@ namespace Web.Api.Repositories
             var conventionPack = new ConventionPack { new CamelCaseElementNameConvention() };
             ConventionRegistry.Register("camelCase", conventionPack, t => true);
 
-            _items = database.GetCollection<T>(CollectionName);
+            _collection = database.GetCollection<T>(CollectionName);
         }
 
         public async Task<T> GetById(string id)
         {
             var filter = Builders<T>.Filter.Eq("Id", id);
-            var result = (await _items.FindAsync(filter)).FirstOrDefault();
+            var result = (await _collection.FindAsync(filter)).FirstOrDefault();
 
             return result;
         }
 
         public async Task<List<T>> FindByFilter(FilterDefinition<T> filter)
         {
-            var result = (await _items.FindAsync(filter)).ToList();
+            var result = (await _collection.FindAsync(filter)).ToList();
             return result;
         }
 
         public async Task<List<T>> GetAll()
         {
-            var result = (await _items.FindAsync(_ => true)).ToList();
+            var result = (await _collection.FindAsync(_ => true)).ToList();
             return result;
         }
 
@@ -60,24 +61,24 @@ namespace Web.Api.Repositories
         /// <returns>T</returns>
         public async Task<T> Upsert(T entity, FilterDefinition<T> filter = null)
         {
-            // Probably don't do this, need to check for creating my own GenericEntity<T> which contains Id (CreatedOn, UpdatedOn?)?
+            // Probably shouldn't use reflection... Probably need to create my own GenericEntity<T> which contains Id (maybe CreatedOn, UpdatedOn?)?
             var id = entity.GetType().GetProperty("Id")?.GetValue(entity, null);
 
-            // No ID
+            // No ID, create and forget
             if (id == null)
             {
-                await _items.InsertOneAsync(entity);
+                await _collection.InsertOneAsync(entity);
                 return entity;
             }
 
-            // Has ID, better look it up
+            // Has ID, better find and replace
             var filterDefinition = Builders<T>.Filter.And(Builders<T>.Filter.Eq("Id", id));
             if (filter != null)
             {
                 filterDefinition &= filter;
             }
 
-            await _items.FindOneAndReplaceAsync(filterDefinition, entity);
+            await _collection.FindOneAndReplaceAsync(filterDefinition, entity);
             return entity;
         }
     }

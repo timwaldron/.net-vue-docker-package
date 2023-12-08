@@ -5,6 +5,7 @@ namespace Web.Api.Services
 {
     public interface IAccountService
     {
-        Task<AccountDto> Create(AccountDto account);
+        Task<bool> Create(AccountDto account);
+        Task<AccountDto> GetByEmail(string email);
     }
 }

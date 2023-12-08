@@ -8,9 +8,12 @@ services:
     build:
       context: .
       dockerfile: ./Web.Api/Dockerfile
-    restart: always
     environment: 
       - TZ=Australia/Melbourne
+      - USER_SECRETS_ID=193656b1-3cdc-49cf-9158-8539ca569208
+    volumes:
+      - $APPDATA/Microsoft/UserSecrets/$USER_SECRETS_ID:/root/.microsoft/usersecrets/$USER_SECRETS_ID
+      - $HOME/.microsoft/usersecrets/$USER_SECRETS_ID:/root/.microsoft/usersecrets/$USER_SECRETS_ID
 
   spa:
     container_name: spa

@@ -18,11 +18,11 @@ namespace Web.Api.Controllers
         }
 
         [HttpPost("create-account")]
-        public async Task<AccountDto> Login([FromBody] AccountDto account)
+        public async Task<ActionResult> Create([FromBody] AccountDto account)
         {
-            var response = await _accountService.Create(account);
+            var success = await _accountService.Create(account);
 
-            return response;
+            return (success ? Ok() : BadRequest());
         }
     }
 }

@@ -18,11 +18,17 @@ namespace Web.Api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<AuthTokenDto> Login([FromBody] AccountDto account)
+        public async Task<ActionResult<AuthTokenDto>> Login([FromBody] AccountDto account)
         {
             var response = await _authService.Login(account);
 
-            return response;
+            // TODO: Address this, shouldn't just assume 'null' is incorrect password
+            if (response == null)
+            {
+                return Unauthorized("Incorrect password");
+            }
+
+            return Ok(response);
         }
     }
 }

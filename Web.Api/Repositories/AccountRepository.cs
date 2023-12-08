@@ -27,31 +27,12 @@ namespace Web.Api.Repositories
             return response.ToDto();
         }
 
-        // TODO: Don't love this name
-        public async Task<List<AccountDto>> FindByQuery(FilterDefinition<Account> filter)
+        public async Task<AccountDto> GetByEmail(string email)
         {
-            var entity = await base.FindByFilter(filter);
+            var existingAccount = await FindByFilter(Builders<Account>.Filter.Eq("Email", email));
+            var entity = existingAccount?.FirstOrDefault();
 
-            return entity?.ToListDto();
+            return entity?.ToDto();
         }
-
-        //public async Task<AccountDto> GetById(string id)
-        //{
-        //    var response = await base.GetById(id);
-
-        //    return response.ToDto();
-        //}
-
-        //public async Task<List<AccountDto>> GetUserList()
-        //{
-        //    // TODO: Refactor this to take a paged settings object (skip/take/order/etc)
-        //    var entity = await base.GetAll();
-        //    return entity.ToListDto();
-        //}
-
-        //public async Task<string> CreateUser(UserRegisterDto dto)
-        //{
-        //    return await Task.FromResult(string.Empty);
-        //}
     }
 }

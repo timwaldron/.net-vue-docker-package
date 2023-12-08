@@ -8,45 +8,49 @@ using Web.Api.Models;
 
 namespace Web.Api.Controllers
 {
-    public class WeatherForecast
-    {
-        public DateTime Date { get; set; }
-
-        public int TemperatureC { get; set; }
-
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-
-        public string Summary { get; set; }
-    }
-
-
     [ApiController]
     [Route("/api/v1/[controller]")]
     public class DevController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
+        public DevController()
         {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
-        private readonly ILogger<DevController> _logger;
-
-        public DevController(ILogger<DevController> logger)
-        {
-            _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet("logged-in")]
+        [RoleGuard(Role.User)]
+        public ActionResult CheckLoggedIn()
+        {
+            return Ok();
+        }
+
+        [HttpGet("is-admin")]
+        [RoleGuard(Role.Admin)]
+        public ActionResult CheckAdminLogin()
+        {
+            return Ok();
+        }
+
+        [HttpGet("json")]
         public IEnumerable<WeatherForecast> Get()
         {
             var rng = new Random();
+            var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
+
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
                 TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
+                Summary = summaries[rng.Next(summaries.Length)]
             })
             .ToArray();
         }
+    }
+
+    public class WeatherForecast
+    {
+        public DateTime Date { get; set; }
+        public int TemperatureC { get; set; }
+        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        public string Summary { get; set; }
     }
 }

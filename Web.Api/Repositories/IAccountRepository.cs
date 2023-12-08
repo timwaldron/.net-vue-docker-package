@@ -11,6 +11,6 @@ namespace Web.Api.Repositories
     public interface IAccountRepository
     {
         Task<AccountDto> Create(AccountDto dto);
-        Task<List<AccountDto>> FindByQuery(FilterDefinition<Account> filter);
+        Task<AccountDto> GetByEmail(string email);
     }
 }
