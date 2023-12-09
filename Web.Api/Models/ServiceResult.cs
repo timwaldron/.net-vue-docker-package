@@ -22,6 +22,16 @@ namespace Web.Api.Models
             Messages = new List<ServiceResultMessage>();
         }
 
+        public ServiceResult(T result, ServiceResultStatus status, string message)
+        {
+            Result = result;
+            Status = status.ToString();
+            Messages = new List<ServiceResultMessage>
+            {
+                new ServiceResultMessage { Message = message }
+            };
+        }
+
         public void AddMessage(string message)
         {
             Messages.Add(new ServiceResultMessage { Message = message });

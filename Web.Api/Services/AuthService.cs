@@ -32,13 +32,15 @@ namespace Web.Api.Services
             var filter = Builders<Account>.Filter.Eq(field => field.Email, payload.Email);
 
             AccountDto account = await _repository.GetByEmail(payload.Email); // Email address is unique
-            bool verified = BCrypt.Net.BCrypt.Verify(payload.Password, account?.Password ?? "");
-
-            if (account == null || !verified) // Email Address doesn't exist
+            if (account == null) // Email Address doesn't exist
             {
-                var sr = new ServiceResult<AuthTokenDto>(null, ServiceResultStatus.Failure);
-                sr.AddMessage("Invalid email or password");
-                return sr;
+                return new ServiceResult<AuthTokenDto>(null, ServiceResultStatus.Failure, "Invalid email or password");
+            }
+
+            bool verified = BCrypt.Net.BCrypt.Verify(payload.Password, account.Password);
+            if (account == null) // Email Address doesn't exist
+            {
+                return new ServiceResult<AuthTokenDto>(null, ServiceResultStatus.Failure, "Invalid email or password");
             }
 
             var authTokenDto = new AuthTokenDto(GenerateJwtToken(account));
