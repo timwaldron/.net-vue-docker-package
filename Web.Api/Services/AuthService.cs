@@ -38,7 +38,7 @@ namespace Web.Api.Services
             }
 
             bool verified = BCrypt.Net.BCrypt.Verify(payload.Password, account.Password);
-            if (account == null) // Email Address doesn't exist
+            if (verified == null) // Passwords don't match
             {
                 return new ServiceResult<AuthTokenDto>(null, ServiceResultStatus.Failure, "Invalid email or password");
             }
