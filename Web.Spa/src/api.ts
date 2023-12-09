@@ -6,7 +6,6 @@ axios.interceptors.request.use((config) => {
 
     if (accountStore.token !== null) {
         config.headers.Authorization = accountStore.token;
-        console.log('Adding token to header:', accountStore.token);
     }
 
     return config;

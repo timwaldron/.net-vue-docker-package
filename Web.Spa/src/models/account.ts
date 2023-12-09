@@ -5,6 +5,6 @@ export type Account = {
 }
 
 export enum Role {
-    User = 0,
-    Admin = 100,
+    User = '0',
+    Admin = '100',
 }

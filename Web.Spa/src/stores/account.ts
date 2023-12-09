@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import axios, { AxiosError } from 'axios';
-import { jwtDecode } from 'jwt-decode';
+import { JwtPayload, jwtDecode } from 'jwt-decode';
 
 import { Account } from '../models/account';
 import { ServiceResult } from '../models/serviceResult';
@@ -21,15 +21,52 @@ export const useAccountStore = defineStore('account', {
             try {
                 const response = (await axios.post<ServiceResult<AuthToken>>('/api/v1/auth/login', { email, password })).data;
 
-                const decoded = jwtDecode<Account>(response.result.token);
-                this.account = decoded;
+                const decoded = jwtDecode<Account & JwtPayload>(response.result.token);
                 this.token = response.result.token;
+                this.account = {
+                    id: decoded.id,
+                    email: decoded.email,
+                    role: decoded.role,
+                };
+                
+                localStorage.setItem('token', this.token);
+                localStorage.setItem('account', JSON.stringify(this.account));
 
-                console.log('Ummm, login action?', response);
                 return response;
             } catch (error: unknown) {
                 return (error as AxiosError<ServiceResult<AuthToken>>).response?.data!;
             }
         },
+        logout(): void {
+            this.account = null;
+            this.token = null;
+            localStorage.removeItem('token');
+            localStorage.removeItem('account');
+        },
+        loadFromLocalStorage(): void {
+            const token = localStorage.getItem('token');
+
+            if (token) {
+                const decoded = jwtDecode<Account & JwtPayload>(token);
+
+                // TODO: I don't like this, but exp is 3 numbers smaller than Date.now()
+                // Investigate this later
+                const unixTime = Date.now().toString().slice(0, -3);
+
+                if (decoded.exp! > parseInt(unixTime)) {
+                    this.token = token;
+                    this.account = {
+                        id: decoded.id,
+                        email: decoded.email,
+                        role: decoded.role,
+                    };
+
+                    localStorage.setItem('account', JSON.stringify(this.account));
+                    return;
+                }
+
+                this.logout();
+            }
+        }
     },
-})
+});

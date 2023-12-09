@@ -1,5 +1,5 @@
 <template>
-    <!-- TODO: NavBar -->
+    <Navbar />
 
     <router-view />
     
@@ -9,11 +9,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import Login from './components/Login.vue';
+import Navbar from './components/Navbar.vue';
 
 export default defineComponent({
     name: 'App',
     components: {
         Login,
+        Navbar,
     },
 });
 </script>

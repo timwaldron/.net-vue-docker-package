@@ -9,19 +9,20 @@
                     <InputText id="email" v-model="email" />
                     <label for="email">Email</label>
                 </span>
-
-                
                 
                 <span class="p-float-label">
                     <Password id="password" toggleMask v-model="password" :feedback="false" />
                     <label for="password">Password</label>
-                    <p v-if="invalidMessage" class="my-0 ml-2" id="username-help"><small class="red">Enter your username to reset your password.</small></p>
+                    <p v-if="invalidMessage" class="my-0 ml-2" id="username-help"><small class="red">Incorrect email or password.</small></p>
                 </span>
             </template>
 
             <template #footer>
                 <div class="flex justify-content-between flex-wrap mt-2">
-                    <Button label="Login" @click="onLoginClick" />
+                    <Button label="Login" @click="onLoginClick" :disabled="activity">
+                        <i v-if="activity" class="pi pi-spin pi-sync ml-2"></i>
+                        <span v-else>Login</span>
+                    </Button>
                     <Button label="Forgot my password" severity="secondary" style="margin-left: 0.5em" />
                 </div>
             </template>

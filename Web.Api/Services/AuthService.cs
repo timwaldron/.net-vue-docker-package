@@ -32,7 +32,7 @@ namespace Web.Api.Services
             var filter = Builders<Account>.Filter.Eq(field => field.Email, payload.Email);
 
             AccountDto account = await _repository.GetByEmail(payload.Email); // Email address is unique
-            bool verified = BCrypt.Net.BCrypt.Verify(payload.Password, account?.Password);
+            bool verified = BCrypt.Net.BCrypt.Verify(payload.Password, account?.Password ?? "");
 
             if (account == null || !verified) // Email Address doesn't exist
             {

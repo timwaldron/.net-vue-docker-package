@@ -14,6 +14,7 @@ import App from './App.vue';
 import { createApp } from 'vue';
 import { router } from './router';
 import { store } from './stores';
+import { useAccountStore } from './stores/account';
 import './api';
 
 // Configuring app
@@ -22,3 +23,6 @@ createApp(App)
     .use(router)    // Vue-Router containing routes
     .use(store)     // State management system
     .mount('#app');
+
+// Reloading data from localStorage
+useAccountStore().loadFromLocalStorage();
