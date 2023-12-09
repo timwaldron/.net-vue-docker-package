@@ -17,7 +17,7 @@ namespace Web.Api.Controllers
             _accountService = accountService;
         }
 
-        [HttpPost("create-account")]
+        [HttpPost("create")]
         public async Task<ActionResult> Create([FromBody] AccountDto account)
         {
             var success = await _accountService.Create(account);

@@ -18,17 +18,17 @@ namespace Web.Api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<AuthTokenDto>> Login([FromBody] AccountDto account)
+        public async Task<ActionResult<ServiceResult<AuthTokenDto>>> Login([FromBody] AccountDto account)
         {
             var response = await _authService.Login(account);
 
-            // TODO: Address this, shouldn't just assume 'null' is incorrect password
-            if (response == null)
+            // Not sure how I feel about this...
+            if (response.Status == ServiceResultStatus.Success.ToString())
             {
-                return Unauthorized("Incorrect password");
+                return Ok(response);
             }
 
-            return Ok(response);
+            return Unauthorized(response);
         }
     }
 }

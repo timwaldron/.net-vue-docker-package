@@ -26,31 +26,28 @@ namespace Web.Api.Services
             _repository = repository;
         }
 
-        public async Task<AuthTokenDto> Login(AccountDto payload)
+        public async Task<ServiceResult<AuthTokenDto>> Login(AccountDto payload)
         {
             // TODO: Add property sanitization (lowercase?) check MongoDB query
             var filter = Builders<Account>.Filter.Eq(field => field.Email, payload.Email);
 
             AccountDto account = await _repository.GetByEmail(payload.Email); // Email address is unique
-            if (account == null) // Email Address doesn't exist
+            bool verified = BCrypt.Net.BCrypt.Verify(payload.Password, account?.Password);
+
+            if (account == null || !verified) // Email Address doesn't exist
             {
-                return null;
+                var sr = new ServiceResult<AuthTokenDto>(null, ServiceResultStatus.Failure);
+                sr.AddMessage("Invalid email or password");
+                return sr;
             }
 
-            bool verified = BCrypt.Net.BCrypt.Verify(payload.Password, account.Password);
-            if (!verified)
-            {
-                return null;
-            }
+            var authTokenDto = new AuthTokenDto(GenerateJwtToken(account));
 
-            var token = GenerateJwtToken(account);
-
-            return new AuthTokenDto(account, token);
+            return new ServiceResult<AuthTokenDto>(authTokenDto, ServiceResultStatus.Success);
         }
 
         private string GenerateJwtToken(AccountDto user)
         {
-            // generate token that is valid for 120 minutes
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_settings.Auth.JwtSecret);
 
@@ -66,6 +63,7 @@ namespace Web.Api.Services
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
+
             return tokenHandler.WriteToken(token);
         }
     }

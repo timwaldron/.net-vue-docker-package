@@ -9,16 +9,19 @@
                     <InputText id="email" v-model="email" />
                     <label for="email">Email</label>
                 </span>
+
+                
                 
                 <span class="p-float-label">
                     <Password id="password" toggleMask v-model="password" :feedback="false" />
                     <label for="password">Password</label>
+                    <p v-if="invalidMessage" class="my-0 ml-2" id="username-help"><small class="red">Enter your username to reset your password.</small></p>
                 </span>
             </template>
 
             <template #footer>
                 <div class="flex justify-content-between flex-wrap mt-2">
-                    <Button label="Login" @click="login" />
+                    <Button label="Login" @click="onLoginClick" />
                     <Button label="Forgot my password" severity="secondary" style="margin-left: 0.5em" />
                 </div>
             </template>
@@ -27,14 +30,15 @@
 </template>
 
 <script lang="ts">
-import axios from 'axios';
-
 import Button from 'primevue/button';
 import Card from 'primevue/card';
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
 
 import { defineComponent } from 'vue';
+import { mapActions } from 'pinia';
+import { useAccountStore } from '../stores/account';
+import { ServiceResultStatus } from '../models/serviceResult';
 
 export default defineComponent({
     name: 'Login',
@@ -46,17 +50,25 @@ export default defineComponent({
     },
     data() {
         return {
-            email: '',
-            password: '',
+            email: 'test@test.com',
+            password: '123',
+            invalidMessage: '',
+            activity: false,
         };
     },
     methods: {
-        async login(): Promise<void> {
-            // const response = (await axios.post<string>('/api/v1/dev', { email: this.email, password: this.password })).data;
-            const response = (await axios.get<unknown>('/api/v1/dev')).data;
+        async onLoginClick(): Promise<void> {
+            this.invalidMessage = '';
+            this.activity = true;
 
-            console.log('The response: ', response);
-        }
+            const response = await this.login(this.email, this.password);
+            this.activity = false;
+
+            if (response.status === ServiceResultStatus.Failure) {
+                this.invalidMessage = response.messages[0].message;
+            }
+        },
+        ...mapActions(useAccountStore, ['login']),
     }
 });
 </script>
@@ -64,5 +76,9 @@ export default defineComponent({
 <style scoped>
 .h-100 {
     height: 100%;
+}
+
+.red {
+    color: crimson;
 }
 </style>

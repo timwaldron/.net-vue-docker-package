@@ -8,6 +8,6 @@ namespace Web.Api.Services
 {
     public interface IAuthService
     {
-        Task<AuthTokenDto> Login(AccountDto details);
+        Task<ServiceResult<AuthTokenDto>> Login(AccountDto details);
     }
 }

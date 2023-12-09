@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"testemail@gmail.com\",\r\n    \"password\": \"123\"\r\n}",
+					"raw": "{\r\n    \"email\": \"test@test.com\",\r\n    \"password\": \"123\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -21,7 +21,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/v1/account/create-account",
+					"raw": "http://localhost:5000/api/v1/account/create",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -31,7 +31,7 @@
 						"api",
 						"v1",
 						"account",
-						"create-account"
+						"create"
 					]
 				}
 			},
@@ -113,7 +113,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NmE4MWVjNjEyMWJlMDViYzUxOTdkMyIsInJvbGUiOiIwIiwiZW1haWwiOiJlbGlzZW1hcmVlMjhAZ21haWwuY29tIiwibmJmIjoxNzAxNDgzNTQwLCJleHAiOjE3MDE0OTA3NDAsImlhdCI6MTcwMTQ4MzU0MH0.zZsqAvcYYSnMMM2PPoYSlJEqr6oxLCToZ2kWc6br5tQ",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NmE4MWVjNjEyMWJlMDViYzUxOTdkMyIsInJvbGUiOiIwIiwiZW1haWwiOiJlbGlzZW1hcmVlMjhAZ21haWwuY29tIiwibmJmIjoxNzAxNTY3NTM3LCJleHAiOjE3MDE1NzQ3MzcsImlhdCI6MTcwMTU2NzUzN30.qxgshRuuIevuXT54jV8SLWBtDtUUJK1vPe3BuzVOt7M",
 							"type": "string"
 						}
 					]
@@ -157,7 +157,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NmE4MWVjNjEyMWJlMDViYzUxOTdkMyIsInJvbGUiOiIwIiwiZW1haWwiOiJlbGlzZW1hcmVlMjhAZ21haWwuY29tIiwibmJmIjoxNzAxNDgzNTQwLCJleHAiOjE3MDE0OTA3NDAsImlhdCI6MTcwMTQ4MzU0MH0.zZsqAvcYYSnMMM2PPoYSlJEqr6oxLCToZ2kWc6br5tQ",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NmE4MWVjNjEyMWJlMDViYzUxOTdkMyIsInJvbGUiOiIwIiwiZW1haWwiOiJlbGlzZW1hcmVlMjhAZ21haWwuY29tIiwibmJmIjoxNzAxNTY3NTM3LCJleHAiOjE3MDE1NzQ3MzcsImlhdCI6MTcwMTU2NzUzN30.qxgshRuuIevuXT54jV8SLWBtDtUUJK1vPe3BuzVOt7M",
 							"type": "string"
 						}
 					]
@@ -174,7 +174,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/v1/dev/logged-in",
+					"raw": "http://localhost:5000/api/v1/dev/is-admin",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -184,7 +184,7 @@
 						"api",
 						"v1",
 						"dev",
-						"logged-in"
+						"is-admin"
 					]
 				}
 			},
