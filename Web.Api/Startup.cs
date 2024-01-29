@@ -38,6 +38,7 @@ namespace Web.Api
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IDevService, DevService>();
+            services.AddScoped<IMailService, MailService>();
 
             // Repositories
             services.AddScoped<IAccountRepository, AccountRepository>();
@@ -58,7 +59,7 @@ namespace Web.Api
             app.UseRouting();
             app.UseAuthorization();
 
-            app.UseMiddleware<JwtMiddleware>();
+            app.UseMiddleware<AuthMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

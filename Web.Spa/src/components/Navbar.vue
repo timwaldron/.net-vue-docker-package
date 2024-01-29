@@ -31,14 +31,14 @@ export default defineComponent({
             return (this.account ? 'Logout' : 'Login');
         },
         menuItems() {
-            const items = [{ label: 'Home', icon: 'pi pi-home' }];
+            const items = [{ label: 'Home', icon: 'pi pi-home', command: () => this.$router.push('/') }];
 
             if (this.account) {
-                items.push({ label: 'Dashboard', icon: 'pi pi-desktop' });
+                items.push({ label: 'Dashboard', icon: 'pi pi-desktop', command: () => this.$router.push('/dashboard') });
             }
 
             if (this.account?.role === Role.Admin) {
-                items.push({ label: 'Administration', icon: 'pi pi-cog' });
+                items.push({ label: 'Administration', icon: 'pi pi-cog', command: () => this.$router.push('/administrator') });
             }
 
             return items;

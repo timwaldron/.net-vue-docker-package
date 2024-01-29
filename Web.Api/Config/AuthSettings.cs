@@ -7,6 +7,6 @@ namespace Web.Api.Config
 {
     public class AuthSettings : IAuthSettings
     {
-        public string JwtSecret { get; set; }
+        public string Secret { get; set; }
     }
 }

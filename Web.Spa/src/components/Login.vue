@@ -13,7 +13,7 @@
                 <span class="p-float-label">
                     <Password id="password" toggleMask v-model="password" :feedback="false" />
                     <label for="password">Password</label>
-                    <p v-if="invalidMessage" class="my-0 ml-2" id="username-help"><small class="red">Incorrect email or password.</small></p>
+                    <p v-if="invalidMessage" class="my-0 ml-2" id="username-help"><small class="red">{{ invalidMessage }}</small></p>
                 </span>
             </template>
 
@@ -23,7 +23,7 @@
                         <i v-if="activity" class="pi pi-spin pi-sync ml-2"></i>
                         <span v-else>Login</span>
                     </Button>
-                    <Button label="Forgot my password" severity="secondary" style="margin-left: 0.5em" />
+                    <Button label="Forgot my password" severity="secondary" style="margin-left: 0.5em" @click="$router.push('/forgot-password')" />
                 </div>
             </template>
         </Card>

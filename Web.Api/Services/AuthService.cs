@@ -51,7 +51,7 @@ namespace Web.Api.Services
         private string GenerateJwtToken(AccountDto user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_settings.Auth.JwtSecret);
+            var key = Encoding.ASCII.GetBytes(_settings.Auth.Secret);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

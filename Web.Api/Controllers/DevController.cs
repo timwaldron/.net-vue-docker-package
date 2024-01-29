@@ -3,8 +3,10 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using Web.Api.Models;
+using Web.Api.Services;
 
 namespace Web.Api.Controllers
 {
@@ -12,8 +14,26 @@ namespace Web.Api.Controllers
     [Route("/api/v1/[controller]")]
     public class DevController : ControllerBase
     {
-        public DevController()
+        private readonly IDevService _devService;
+
+        public DevController(IDevService devService)
         {
+            _devService = devService;
+        }
+
+        [HttpGet("test-mail")]
+        public ActionResult TestMailer(string email)
+        {
+            try
+            {
+                _devService.SendMail(email);
+            }
+            catch
+            {
+                return UnprocessableEntity();
+            }
+
+            return Ok();
         }
 
         [HttpGet("logged-in")]

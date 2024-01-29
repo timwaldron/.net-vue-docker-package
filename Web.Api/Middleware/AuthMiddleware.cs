@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace Web.Api.Middleware
 {
-    public class JwtMiddleware
+    public class AuthMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly IAppSettings _settings;
 
-        public JwtMiddleware(RequestDelegate next, IAppSettings settings)
+        public AuthMiddleware(RequestDelegate next, IAppSettings settings)
         {
             _next = next;
             _settings = settings;
@@ -36,7 +36,7 @@ namespace Web.Api.Middleware
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_settings.Auth.JwtSecret);
+                var key = Encoding.ASCII.GetBytes(_settings.Auth.Secret);
 
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {

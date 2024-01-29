@@ -7,7 +7,7 @@ namespace Web.Api.Services
 {
     public class AccountService : IAccountService
     {
-        IAccountRepository _repository;
+        private readonly IAccountRepository _repository;
 
         public AccountService(IAccountRepository repository)
         {
