@@ -1,8 +1,8 @@
-﻿using Web.Api.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Web.Api.Models;
+using Web.Api.Services.Interfaces;
 
 namespace Web.Api.Controllers
 {

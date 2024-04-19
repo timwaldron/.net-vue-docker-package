@@ -1,7 +1,6 @@
 ﻿using Web.Api.Config;
 using Web.Api.Models;
 using Web.Api.Models.Entities;
-using Web.Api.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
@@ -12,6 +11,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Web.Api.Services.Interfaces;
+using Web.Api.Repositories.Interfaces;
 
 namespace Web.Api.Services
 {
@@ -38,7 +39,7 @@ namespace Web.Api.Services
             }
 
             bool verified = BCrypt.Net.BCrypt.Verify(payload.Password, account.Password);
-            if (verified == null) // Passwords don't match
+            if (verified == false) // Passwords don't match
             {
                 return new ServiceResult<AuthTokenDto>(null, ServiceResultStatus.Failure, "Invalid email or password");
             }
@@ -59,6 +60,7 @@ namespace Web.Api.Services
                     new Claim("id", user.Id.ToString()),
                     new Claim("role", user.Role.ToString("d")),
                     new Claim("email", user.Email),
+                    new Claim("verified", user.Verified ? "Y" : "N"),
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(120),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

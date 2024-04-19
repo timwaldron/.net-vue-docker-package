@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Web.Api.Repositories.Interfaces;
 
 namespace Web.Api.Repositories
 {
@@ -15,11 +16,9 @@ namespace Web.Api.Repositories
     {
         public override string CollectionName => "accounts";
 
-        public AccountRepository(IAppSettings settings) : base(settings)
-        {
-        }
+        public AccountRepository(IAppSettings settings) : base(settings) { }
 
-        public async Task<AccountDto> Create(AccountDto dto)
+        public async Task<AccountDto> Save(AccountDto dto)
         {
             var entity = dto.ToEntity();
             var response = await base.Upsert(entity);

@@ -5,6 +5,7 @@ import { JwtPayload, jwtDecode } from 'jwt-decode';
 import { Account } from '../models/account';
 import { ServiceResult } from '../models/serviceResult';
 import { AuthToken } from '../models/auth';
+import { OperationOutcome, OperationResult } from '../models/operationResult';
 
 export type AccountStore = {
     account: Account | null;
@@ -23,18 +24,27 @@ export const useAccountStore = defineStore('account', {
 
                 const decoded = jwtDecode<Account & JwtPayload>(response.result.token);
                 this.token = response.result.token;
+
                 this.account = {
                     id: decoded.id,
                     email: decoded.email,
                     role: decoded.role,
+                    verified: decoded.verified,
                 };
-                
+
                 localStorage.setItem('token', this.token);
                 localStorage.setItem('account', JSON.stringify(this.account));
 
                 return response;
             } catch (error: unknown) {
                 return (error as AxiosError<ServiceResult<AuthToken>>).response?.data!;
+            }
+        },
+        async verify(code: string): Promise<void> {
+            const response = (await axios.get<OperationResult>('/api/v1/account/verify', { params: { code, email: this.account?.email } })).data;
+
+            if (response.outcome === OperationOutcome.Success && this.account !== null) {
+                this.account.verified = 'Y';
             }
         },
         logout(): void {
@@ -59,6 +69,7 @@ export const useAccountStore = defineStore('account', {
                         id: decoded.id,
                         email: decoded.email,
                         role: decoded.role,
+                        verified: decoded.verified,
                     };
 
                     localStorage.setItem('account', JSON.stringify(this.account));

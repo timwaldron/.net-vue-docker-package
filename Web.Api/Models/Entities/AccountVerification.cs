@@ -1,22 +1,18 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
+using System;
 
 namespace Web.Api.Models.Entities
 {
-    public class Account
+    public class AccountVerification
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        [BsonRequired]
         public string Email { get; set; }
-
-        [BsonRequired]
-        public string Password { get; set; }
-
-        public bool Verified { get; set; }
-        public bool Locked { get; set; }
-        public Role Role { get; set; }
+        public string AuthCode { get; set; }
+        public int Attempts { get; set; }
+        public DateTime Expiry { get; set; }
     }
 }

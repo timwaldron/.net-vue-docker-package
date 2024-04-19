@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using Web.Api.Models;
-using Web.Api.Services;
+using Web.Api.Services.Interfaces;
 
 namespace Web.Api.Controllers
 {
@@ -22,11 +22,11 @@ namespace Web.Api.Controllers
         }
 
         [HttpGet("test-mail")]
-        public ActionResult TestMailer(string email)
+        public async Task<ActionResult> TestMailer(string email)
         {
             try
             {
-                _devService.SendMail(email);
+                await _devService.SendMail(email);
             }
             catch
             {

@@ -1,10 +1,10 @@
 ﻿using System.Net.Mail;
 using System.Threading.Tasks;
 
-namespace Web.Api.Services
+namespace Web.Api.Services.Interfaces
 {
     public interface IMailService
     {
-        void SendMail(MailMessage mailMessager);
+        Task SendMail(MailMessage mailMessager);
     }
 }

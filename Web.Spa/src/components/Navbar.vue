@@ -12,12 +12,13 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import Menubar from 'primevue/menubar';
-import InputText from 'primevue/inputtext';
-import Button from 'primevue/button';
 import { useAccountStore } from '../stores/account';
 import { mapActions, mapState } from 'pinia';
 import { Role } from '../models/account';
+
+import Menubar from 'primevue/menubar';
+import InputText from 'primevue/inputtext';
+import Button from 'primevue/button';
 
 export default defineComponent({
     name: 'Navbar',
@@ -31,7 +32,13 @@ export default defineComponent({
             return (this.account ? 'Logout' : 'Login');
         },
         menuItems() {
-            const items = [{ label: 'Home', icon: 'pi pi-home', command: () => this.$router.push('/') }];
+            const items = [
+                { label: 'Home', icon: 'pi pi-home', command: () => this.$router.push('/') }
+            ];
+
+            if (this.account?.verified !== 'Y') {
+                return items;
+            }
 
             if (this.account) {
                 items.push({ label: 'Dashboard', icon: 'pi pi-desktop', command: () => this.$router.push('/dashboard') });

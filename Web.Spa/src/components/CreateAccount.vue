@@ -25,7 +25,7 @@
             <template #footer>
                 <div class="flex justify-content-between flex-wrap mt-2">
                     <Button @click="onLoginClick" :disabled="activity">
-                        <i v-if="activity" class="pi pi-spin pi-sync ml-2"></i>
+                        <i v-if="activity" class="pi pi-spin pi-sync"></i>
                         <span v-else>Create Account</span>
                     </Button>
                 </div>

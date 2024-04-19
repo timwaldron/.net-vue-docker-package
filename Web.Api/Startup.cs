@@ -14,7 +14,9 @@ using System.Threading.Tasks;
 using Web.Api.Config;
 using Web.Api.Middleware;
 using Web.Api.Repositories;
+using Web.Api.Repositories.Interfaces;
 using Web.Api.Services;
+using Web.Api.Services.Interfaces;
 
 namespace Web.Api
 {
@@ -42,6 +44,7 @@ namespace Web.Api
 
             // Repositories
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IAccountVerificationRepository, AccountVerificationRepository>();
 
             services.AddControllers();
         }

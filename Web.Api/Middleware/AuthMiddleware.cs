@@ -1,5 +1,4 @@
 ﻿using Web.Api.Config;
-using Web.Api.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -7,6 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Web.Api.Services.Interfaces;
 
 namespace Web.Api.Middleware
 {

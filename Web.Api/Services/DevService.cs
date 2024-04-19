@@ -1,5 +1,6 @@
 ﻿using System.Net.Mail;
 using System.Threading.Tasks;
+using Web.Api.Services.Interfaces;
 
 namespace Web.Api.Services
 {
@@ -12,14 +13,14 @@ namespace Web.Api.Services
             _mailService = mailService;
         }
 
-        public void SendMail(string email)
+        public async Task SendMail(string email)
         {
             var mail = new MailMessage();
             mail.To.Add(email);
             mail.Subject = "Hello from Dev Server";
             mail.Body = "This is a test email sent using SMTP in C#.\n\nTest separate lines";
 
-            _mailService.SendMail(mail);
+            await _mailService.SendMail(mail);
         }
     }
 }

@@ -6,11 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Web.Api.Repositories
+namespace Web.Api.Repositories.Interfaces
 {
     public interface IAccountRepository
     {
-        Task<AccountDto> Create(AccountDto dto);
+        Task<AccountDto> Save(AccountDto dto);
         Task<AccountDto> GetByEmail(string email);
     }
 }

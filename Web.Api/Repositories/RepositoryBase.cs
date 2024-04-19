@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -17,20 +18,29 @@ namespace Web.Api.Repositories
 
         public RepositoryBase(IAppSettings settings)
         {
-            var clientSettings = new MongoClientSettings
+            try
             {
-                // TODO: Design a way to easily configure the MongoDB container to set an admin password
-                //Credential = MongoCredential.CreateCredential(settings.Database.AdminDb, settings.Database.AdminUser, settings.Database.AdminPass),
-                Server = new MongoServerAddress(settings.Database.ConnectionUrl, settings.Database.Port),
-            };
+                var clientSettings = new MongoClientSettings
+                {
+                    // TODO: Design a way to easily configure the MongoDB container to set an admin password
+                    //Credential = MongoCredential.CreateCredential(settings.Database.AdminDb, settings.Database.AdminUser, settings.Database.AdminPass),
+                    Server = new MongoServerAddress(settings.Database.ConnectionUrl, settings.Database.Port),
+                };
 
-            var client = new MongoClient(clientSettings);
-            var database = client.GetDatabase(settings.Database.Name);
+                var client = new MongoClient(clientSettings);
+                var database = client.GetDatabase(settings.Database.Name);
 
-            var conventionPack = new ConventionPack { new CamelCaseElementNameConvention() };
-            ConventionRegistry.Register("camelCase", conventionPack, t => true);
+                var conventionPack = new ConventionPack { new CamelCaseElementNameConvention() };
+                ConventionRegistry.Register("camelCase", conventionPack, t => true);
 
-            _collection = database.GetCollection<T>(CollectionName);
+                _collection = database.GetCollection<T>(CollectionName);
+            }
+            catch (Exception ex)
+            {
+                // TODO: LOG
+                Debug.WriteLine($"Error setting up repository base - {ex.Message}");
+                Environment.Exit(1);
+            }
         }
 
         public async Task<T> GetById(string id)
@@ -80,6 +90,21 @@ namespace Web.Api.Repositories
 
             await _collection.FindOneAndReplaceAsync(filterDefinition, entity);
             return entity;
+        }
+
+        public async Task<bool> DeleteById(string id)
+        {
+            try
+            {
+                await _collection.DeleteOneAsync(Builders<T>.Filter.Eq("Id", id));
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Log error
+                Debug.WriteLine($"Exception deleting: {ex.Message}");
+                return false;
+            }
         }
     }
 }

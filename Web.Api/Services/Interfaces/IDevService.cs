@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace Web.Api.Services
+namespace Web.Api.Services.Interfaces
 {
     public interface IDevService
     {
-        void SendMail(string email);
+        Task SendMail(string email);
     }
 }
